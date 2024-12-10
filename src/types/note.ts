@@ -3,8 +3,8 @@ export interface Note {
   title: string;
   content: string;
   tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export type SortOption = 'date' | 'title' | 'tags';

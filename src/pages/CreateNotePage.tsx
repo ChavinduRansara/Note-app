@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { NoteEditor } from '../components/notes/NoteEditor';
-import { useNotes } from '../hooks/useNotes';
+import { useNotes } from '../contexts/NotesContext';
 
 export function CreateNotePage() {
   const navigate = useNavigate();
-  const { handleSaveNote } = useNotes();
+  const { addNote } = useNotes();
 
   const handleSave = (noteData: { title: string; content: string; tags: string[] }) => {
-    handleSaveNote(noteData);
+    addNote(noteData);
     navigate('/');
   };
 

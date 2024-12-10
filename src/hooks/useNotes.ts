@@ -1,25 +1,35 @@
-import { useState } from 'react';
-import { Note, SortOption } from '../types/note';
+import { useContext } from 'react';
+import { NotesContext } from '../contexts/NotesContext';
 import { useNavigate } from 'react-router-dom';
-
-const SAMPLE_NOTES: Note[] = [
-  {
-    id: '1',
-    title: 'Welcome to NotePro',
-    content: 'Start creating your notes today! Click the "Create Note" button to begin.',
-    tags: ['welcome'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
+import { Note } from '../types/note';
 
 export function useNotes() {
+  const context = useContext(NotesContext);
   const navigate = useNavigate();
-  const [notes, setNotes] = useState<Note[]>(SAMPLE_NOTES);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('date');
 
-  const filteredNotes = notes
+  if (!context) {
+    throw new Error('useNotes must be used within a NotesProvider');
+  }
+
+  const {
+    notes,
+    searchQuery,
+    sortBy,
+    setSearchQuery,
+    setSortBy,
+    addNote,
+    editNote,
+    deleteNote,
+  } = context;
+
+  const processedNotes: Note[] = notes.map((note: any) => ({
+    ...note,
+    tags: Array.isArray(note.tags) ? note.tags : note.tags.split(',').map((tag: string) => tag.trim()),
+    created_at: new Date(note.created_at),
+    updated_at: new Date(note.updated_at),
+  }));
+
+  const filteredNotes = processedNotes 
     .filter((note) =>
       note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       note.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -32,23 +42,15 @@ export function useNotes() {
         case 'tags':
           return a.tags.length - b.tags.length;
         default:
-          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+          return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
       }
     });
 
-  const handleSaveNote = (noteData: { title: string; content: string; tags: string[] }) => {
-    const newNote: Note = {
-      id: Date.now().toString(),
-      ...noteData,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    setNotes([newNote, ...notes]);
-  };
-
-  const handleEditNote = (note: Note) => {
+  const handleEditNote = (note: { id: string }) => {
     navigate(`/edit/${note.id}`);
   };
+
+  console.log('filteredNotes:', filteredNotes);
 
   return {
     notes: filteredNotes,
@@ -56,7 +58,8 @@ export function useNotes() {
     setSearchQuery,
     sortBy,
     setSortBy,
-    handleSaveNote,
+    handleSaveNote: addNote,
     handleEditNote,
+    deleteNote,
   };
 }

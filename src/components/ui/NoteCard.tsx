@@ -19,7 +19,7 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500" />
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            {new Date(note.updatedAt).toLocaleDateString()}
+            {new Date(note.updated_at).toLocaleDateString()}
           </span>
         </div>
         {note.tags.length > 0 && (

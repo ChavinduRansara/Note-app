@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { Menu, X, Home, PlusCircle, User } from 'lucide-react';
+import { useState } from 'react';
+import { Menu, X, Home, PlusCircle, User, LogOut } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { useAuth } from '../../contexts/AuthContext';
+import { NotePro } from '../ui/NotePro';
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const navItems = [
     { icon: Home, label: 'All Notes', href: '/' },
@@ -24,8 +27,9 @@ export function Navigation() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           <div className="flex items-center">
-            <NavLink to="/" className="text-xl font-bold text-gray-900 dark:text-white">
-              NotePro
+            <NavLink to="/" className="flex items-center space-x-2 text-xl font-bold text-gray-900 dark:text-white">
+              <NotePro className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <span>NotePro</span>
             </NavLink>
           </div>
 
@@ -37,7 +41,19 @@ export function Navigation() {
                 <span>{label}</span>
               </NavLink>
             ))}
-            <ThemeToggle />
+            
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              {user && (
+                <button
+                  onClick={logout}
+                  className="flex items-center space-x-2 rounded-lg px-3 py-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Logout</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -74,6 +90,18 @@ export function Navigation() {
                 <span>{label}</span>
               </NavLink>
             ))}
+            {user && (
+              <button
+                onClick={() => {
+                  logout();
+                  setIsOpen(false);
+                }}
+                className="flex w-full items-center space-x-2 rounded-md px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-blue-400"
+              >
+                <LogOut className="h-5 w-5" />
+                <span>Logout</span>
+              </button>
+            )}
           </div>
         </div>
       )}
