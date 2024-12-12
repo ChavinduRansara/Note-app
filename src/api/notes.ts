@@ -4,11 +4,17 @@ import { Note } from '../types/note';
 export interface CreateNoteData {
   title: string;
   content: string;
+  category_id: string;
   tags: string[];
 }
 
 export async function getNotes() {
   const { data } = await api.get<Note[]>('api/notes/get-notes');
+  return data;
+}
+
+export async function getNoteById(id: string) {
+  const { data } = await api.get<Note>(`api/notes/get-notes/${id}`);
   return data;
 }
 
@@ -18,7 +24,7 @@ export async function createNote(note: CreateNoteData) {
 }
 
 export async function updateNote(id: string, note: CreateNoteData) {
-  const { data } = await api.put<Note>(`/notes/${id}`, note);
+  const { data } = await api.put<Note>(`api/notes/update-notes/${id}`, note);
   return data;
 }
 

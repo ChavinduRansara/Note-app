@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { Menu, X, Home, PlusCircle, User, LogOut } from 'lucide-react';
+import { Menu, X, Home, PlusCircle, User } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { ThemeToggle } from '../ui/ThemeToggle';
-import { useAuth } from '../../contexts/AuthContext';
 import { NotePro } from '../ui/NotePro';
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout } = useAuth();
 
   const navItems = [
     { icon: Home, label: 'All Notes', href: '/' },
@@ -23,7 +21,7 @@ export function Navigation() {
     } transition-colors`;
 
   return (
-    <nav className="bg-white shadow transition-colors dark:bg-gray-800">
+    <nav className="fixed left-0 right-0 top-0 z-50 bg-white shadow transition-colors dark:bg-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           <div className="flex items-center">
@@ -44,15 +42,6 @@ export function Navigation() {
             
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              {user && (
-                <button
-                  onClick={logout}
-                  className="flex items-center space-x-2 rounded-lg px-3 py-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                >
-                  <LogOut className="h-5 w-5" />
-                  <span>Logout</span>
-                </button>
-              )}
             </div>
           </div>
 
@@ -71,7 +60,7 @@ export function Navigation() {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden">
+        <div className="absolute left-0 right-0 top-16 z-50 bg-white shadow-lg dark:bg-gray-800 md:hidden">
           <div className="space-y-1 px-2 pb-3 pt-2">
             {navItems.map(({ icon: Icon, label, href }) => (
               <NavLink
@@ -90,18 +79,6 @@ export function Navigation() {
                 <span>{label}</span>
               </NavLink>
             ))}
-            {user && (
-              <button
-                onClick={() => {
-                  logout();
-                  setIsOpen(false);
-                }}
-                className="flex w-full items-center space-x-2 rounded-md px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-blue-400"
-              >
-                <LogOut className="h-5 w-5" />
-                <span>Logout</span>
-              </button>
-            )}
           </div>
         </div>
       )}

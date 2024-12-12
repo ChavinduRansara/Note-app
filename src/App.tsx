@@ -20,6 +20,7 @@ function App() {
               <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/create" element={<CreateNotePage />} />
+                <Route path="/edit/:id" element={<CreateNotePage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>

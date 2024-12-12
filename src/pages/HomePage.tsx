@@ -15,7 +15,7 @@ export function HomePage() {
 
   return (
     <>
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="my-12 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
         
         <div className="flex items-center gap-4">

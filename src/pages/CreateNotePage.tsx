@@ -1,12 +1,18 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { NoteEditor } from '../components/notes/NoteEditor';
 import { useNotes } from '../contexts/NotesContext';
 
 export function CreateNotePage() {
   const navigate = useNavigate();
-  const { addNote } = useNotes();
+  const { addNote, editNote } = useNotes();
+  const noteId = useParams().id;
 
-  const handleSave = (noteData: { title: string; content: string; tags: string[] }) => {
+  const handleSave = (noteData: { title: string; content: string; tags: string[]; category_id: string }) => {
+    if (noteId) {
+      editNote(noteId, noteData);
+      navigate('/');
+      return;
+    }
     addNote(noteData);
     navigate('/');
   };
@@ -17,6 +23,7 @@ export function CreateNotePage() {
       <NoteEditor
         onSave={handleSave}
         onCancel={() => navigate('/')}
+        noteId={noteId}
       />
     </div>
   );

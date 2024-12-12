@@ -10,8 +10,8 @@ interface NotesContextType {
   error: string | null;
   setSearchQuery: (query: string) => void;
   setSortBy: (option: SortOption) => void;
-  addNote: (noteData: { title: string; content: string; tags: string[] }) => Promise<void>;
-  editNote: (id: string, noteData: { title: string; content: string; tags: string[] }) => Promise<void>;
+  addNote: (noteData: { title: string; content: string; tags: string[]; category_id: string }) => Promise<void>;
+  editNote: (id: string, noteData: { title: string; content: string; tags: string[]; category_id: string }) => Promise<void>;
   deleteNote: (id: string) => Promise<void>;
   refreshNotes: () => Promise<void>;
 }
@@ -49,7 +49,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
     refreshNotes();
   }, [refreshNotes]);
 
-  const addNote = async (noteData: { title: string; content: string; tags: string[] }) => {
+  const addNote = async (noteData: { title: string; content: string; tags: string[]; category_id: string }) => {
     try {
       await notesApi.createNote(noteData);
       await refreshNotes();
@@ -61,7 +61,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
 
   const editNote = async (
     id: string,
-    noteData: { title: string; content: string; tags: string[] }
+    noteData: { title: string; content: string; tags: string[]; category_id: string }
   ) => {
     try {
       await notesApi.updateNote(id, noteData);
